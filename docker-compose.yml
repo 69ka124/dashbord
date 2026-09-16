@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dashbord
+      POSTGRES_PASSWORD: dashbord
+      POSTGRES_DB: dashbord
+    ports:
+      - "5432:5432"
+    volumes:
+      - dashbord_pg:/var/lib/postgresql/data
+
+volumes:
+  dashbord_pg:

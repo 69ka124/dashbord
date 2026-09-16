@@ -1,0 +1,23 @@
+[Unit]
+Description=Finance Dashboard (Next.js)
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/dashbord
+EnvironmentFile=/opt/dashbord/.env
+Environment=NODE_ENV=production
+Environment=PORT=5001
+Environment=HOSTNAME=0.0.0.0
+ExecStart=/usr/bin/node /opt/dashbord/.next/standalone/server.js
+Restart=always
+RestartSec=5
+TimeoutStopSec=30
+
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
