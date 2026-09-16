@@ -74,8 +74,18 @@ export async function importGoogleSpreadsheet(userId: string, input?: string): P
       xlsx = await downloadPublicSpreadsheetXlsx(spreadsheetId);
       archive = await archiveFromXlsx(xlsx);
     } catch (publicError) {
-      if (!(await hasGoogleSheetsAccess(userId))) {
-        throw publicError;
+      const canUseApi = await hasGoogleSheetsAccess(userId);
+      if (!canUseApi) {
+        const message =
+          publicError instanceof Error
+            ? publicError.message
+            : "Не удалось скачать таблицу";
+        throw new GoogleSyncError(
+          "API_ERROR",
+          message.includes("закрыта") || message.includes("ссылка")
+            ? message
+            : "Не удалось открыть таблицу. В Google: доступ «все, у кого есть ссылка» → «Читатель», затем повторите.",
+        );
       }
       const sheets = await getGoogleSheetsClient(userId);
       archive = await archiveFromGoogleApi(sheets, spreadsheetId);

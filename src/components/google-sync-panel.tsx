@@ -42,10 +42,14 @@ export function GoogleSyncPanel({
       <div className="space-y-1">
         <h2 className="font-[family-name:var(--font-display)] text-lg">Google Таблица</h2>
         <p className="text-sm text-[var(--muted)]">
-          Забирает всю таблицу в архив (все листы и ячейки) и раскладывает известные вкладки в
-          дашборд. Обратно ничего не пишется. Для переноса без Google-входа откройте доступ
-          «все, у кого есть ссылка» на просмотр.
+          Вставьте ссылку на таблицу и нажмите «Перенести». Google-аккаунт в дашборде не нужен —
+          достаточно открыть доступ к таблице на просмотр по ссылке.
         </p>
+        <ol className="list-decimal space-y-1 pl-5 text-sm text-[var(--muted)]">
+          <li>В Google Таблице: «Настройки доступа» → «Все, у кого есть ссылка» → «Читатель».</li>
+          <li>Скопируйте ссылку вида docs.google.com/spreadsheets/d/…</li>
+          <li>Листы с именами «Доходы», «Расходы», «К/А», «Закупки» попадут в дашборд; остальные — в архив.</li>
+        </ol>
         {lastPullAt ? <p className="text-sm text-[var(--muted)]">Последний перенос: {lastPullAt}</p> : null}
         {lastArchive ? (
           <p className="text-sm text-[var(--muted)]">
@@ -53,7 +57,7 @@ export function GoogleSyncPanel({
             {lastArchive.extraSheets ? ` · ${lastArchive.extraSheets}` : ""}.
           </p>
         ) : null}
-        {lastError ? <p className="text-sm text-[var(--danger)]">{lastError}</p> : null}
+        {lastError ? <p className="text-sm text-[var(--negative)]">{lastError}</p> : null}
       </div>
 
       <form
@@ -85,22 +89,23 @@ export function GoogleSyncPanel({
           defaultValue={spreadsheetUrl}
           placeholder="https://docs.google.com/spreadsheets/d/…"
           disabled={pending}
+          required
         />
         <button className="btn" type="submit" disabled={pending}>
-          Перенести в дашборд
+          {pending ? "Перенос…" : "Перенести в дашборд"}
         </button>
       </form>
 
       {spreadsheetUrl ? (
-        <a className="text-sm text-[var(--accent)] underline-offset-2 hover:underline" href={spreadsheetUrl} target="_blank" rel="noreferrer">
+        <a
+          className="text-sm text-[var(--accent)] underline-offset-2 hover:underline"
+          href={spreadsheetUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
           Открыть таблицу
         </a>
       ) : null}
-
-      <p className="text-xs text-[var(--muted)]">
-        В дашборд идут «Доходы», «Расходы», «К/А», «Закупки». Остальные листы и лишние колонки
-        сохраняются в архив для будущего переноса.
-      </p>
     </section>
   );
 }
