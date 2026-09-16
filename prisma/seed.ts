@@ -158,7 +158,6 @@ async function clearDashboardData() {
   await prisma.counterparty.deleteMany();
   await prisma.workType.deleteMany();
   await prisma.accessGrant.deleteMany();
-  await prisma.shareLink.deleteMany();
   await prisma.googleSheetSnapshot.deleteMany();
   await prisma.googleSyncConfig.deleteMany();
   await prisma.session.deleteMany();

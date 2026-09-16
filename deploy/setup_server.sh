@@ -2,6 +2,9 @@
 set -euo pipefail
 APP_DIR="/opt/dashbord"
 DATA_DIR="$APP_DIR/data"
+# Set before first run, e.g. export PUBLIC_URL="https://dashbord.example.com"
+PUBLIC_URL="${PUBLIC_URL:-http://127.0.0.1:5001}"
+OWNER_EMAIL_DEFAULT="${OWNER_EMAIL:-owner@example.com}"
 
 mkdir -p "$DATA_DIR" "$APP_DIR/logs"
 cd "$APP_DIR"
@@ -12,13 +15,13 @@ if [ ! -f .env ]; then
 DATABASE_URL="file:/opt/dashbord/data/prod.db"
 AUTH_SECRET="$SECRET"
 AUTH_TRUST_HOST=true
-AUTH_URL="http://135.106.209.129:5001"
-OWNER_EMAIL="owner@demo.local"
+AUTH_URL="$PUBLIC_URL"
+OWNER_EMAIL="$OWNER_EMAIL_DEFAULT"
 OPEN_ACCESS="false"
 AUTH_GOOGLE_ID=""
 AUTH_GOOGLE_SECRET=""
 EOF
-  echo "Created $APP_DIR/.env"
+  echo "Created $APP_DIR/.env — edit OWNER_EMAIL and AUTH_URL before sharing"
 fi
 
 if ! grep -q '^OPEN_ACCESS=' .env 2>/dev/null; then
@@ -49,5 +52,5 @@ systemctl enable dashbord
 systemctl restart dashbord
 systemctl is-active dashbord
 
-echo "==> Ready: http://135.106.209.129:5001/login"
-echo "==> Demo login email: owner@demo.local"
+echo "==> Ready: $PUBLIC_URL/login"
+echo "==> Login with OWNER_EMAIL from .env"

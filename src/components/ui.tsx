@@ -4,37 +4,6 @@ import { formatMoney } from "@/lib/money";
 export { CollapsibleFormPanel } from "@/components/ui/collapsible-form-panel";
 export { FormField } from "@/components/ui/form-field";
 
-export function KpiCard({
-  label,
-  value,
-  hint,
-  tone = "default",
-}: {
-  label: string;
-  value: number;
-  hint?: string;
-  tone?: "default" | "positive" | "negative" | "accent";
-}) {
-  const toneClass =
-    tone === "positive"
-      ? "text-[var(--positive)]"
-      : tone === "negative"
-        ? "text-[var(--negative)]"
-        : tone === "accent"
-          ? "text-[var(--accent)]"
-          : "text-[var(--ink)]";
-
-  return (
-    <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-4 shadow-[0_1px_0_rgba(15,23,22,0.04)]">
-      <p className="text-sm text-[var(--muted)]">{label}</p>
-      <p className={`mt-2 font-[family-name:var(--font-display)] text-2xl tabular-nums ${toneClass}`}>
-        {formatMoney(value)}
-      </p>
-      {hint ? <p className="mt-1 text-xs text-[var(--muted)]">{hint}</p> : null}
-    </div>
-  );
-}
-
 export function EmptyState({ title, hint }: { title: string; hint: string }) {
   return (
     <div className="rounded-xl border border-dashed border-[var(--line)] bg-[var(--surface)]/60 px-6 py-12 text-center">

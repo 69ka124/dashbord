@@ -7,8 +7,6 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
-    "db:up": "docker compose up -d",
-    "db:down": "docker compose down",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:clear": "npx tsx prisma/seed.ts --clear-only",
@@ -29,8 +27,7 @@
     "react-dom": "19.2.8",
     "recharts": "^3.10.1",
     "sonner": "^2.0.8",
-    "xlsx": "^0.18.5",
-    "zod": "^4.4.3"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

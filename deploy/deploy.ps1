@@ -1,14 +1,20 @@
-# Deploy finance dashboard to VPS (isolated from sport/mentally/trading).
+# Deploy finance dashboard to a VPS.
 # Usage:
 #   powershell -ExecutionPolicy Bypass -File deploy\deploy.ps1
+#   powershell -ExecutionPolicy Bypass -File deploy\deploy.ps1 -HostName root@YOUR_IP
 param(
-    [string]$HostName = "root@135.106.209.129",
-    [string]$RemotePath = "/opt/dashbord"
+    [string]$HostName = "root@YOUR_SERVER_IP",
+    [string]$RemotePath = "/opt/dashbord",
+    [string]$PublicUrl = "https://YOUR_DOMAIN"
 )
 
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 Set-Location $Root
+
+if ($HostName -like "*YOUR_SERVER*") {
+    Write-Error "Set -HostName, e.g. -HostName root@1.2.3.4"
+}
 
 $Archive = Join-Path $env:TEMP "dashbord-deploy.tgz"
 if (Test-Path $Archive) { Remove-Item $Archive -Force }
@@ -28,7 +34,6 @@ ssh $HostName "mkdir -p $RemotePath"
 scp $Archive "${HostName}:${RemotePath}/dashbord-deploy.tgz"
 
 Write-Host "==> Build and restart on server"
-# Avoid PowerShell here-string CRLF breaking remote bash
 $remote = @(
   "set -e",
   "cd $RemotePath",
@@ -44,5 +49,5 @@ ssh $HostName $remote
 
 Write-Host ""
 Write-Host "==> Deploy done"
-Write-Host "URL:  https://135.106.209.129.sslip.io/"
-Write-Host "Open access: no login required while OPEN_ACCESS=true"
+Write-Host "URL:  $PublicUrl"
+Write-Host "Login: email from OWNER_EMAIL in server .env (OPEN_ACCESS should be false)"

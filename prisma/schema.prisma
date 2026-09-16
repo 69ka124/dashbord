@@ -53,18 +53,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model ShareLink {
-  id        String    @id @default(cuid())
-  token     String    @unique
-  role      String
-  label     String?
-  expiresAt DateTime?
-  revokedAt DateTime?
-  createdAt DateTime  @default(now())
-
-  @@index([token])
-}
-
 /// Invite by email: user signs in with this address (no password).
 model AccessGrant {
   id        String    @id @default(cuid())
